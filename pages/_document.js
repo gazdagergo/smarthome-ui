@@ -4,7 +4,7 @@ import { ServerStyleSheet } from "styled-components";
 export const title = "Next.js PWA Boilerplate";
 const description =
   "Next.js PWA Boilerplate starts your progressive web app off with a perfect Google Lighthouse score.";
-const url = `https://next-pwa-boilerplate.now.sh`;
+const url = `https://smarthome-ui.herokuapp.com/`;
 const thumbnail = `${url}/static/graphics/thumbnail.png`;
 
 export default class MyDocument extends Document {
