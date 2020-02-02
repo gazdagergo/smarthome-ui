@@ -2,6 +2,11 @@
   "version": 2,
   "name": "smarthome-ui",
   "alias": ["smarthome-ui"],
+  "build": {
+    "env": {
+      "BASE_URL": "@base-url"
+    }
+  },  
   "builds": [{ "src": "package.json", "use": "@now/next" }],
   "routes": [
     {

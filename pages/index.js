@@ -32,6 +32,7 @@ const Button = styled.button`
   justify-content: center;
   line-height: 24px;
   margin: 0 10px;
+  box-sizing: border-box;
 `
 
 const Lamp = styled.div`
@@ -49,8 +50,16 @@ const Row = styled.div`
   justify-content: center;
 `
 
-// const { BASE_URL: baseUrl } = process.env;
 const baseUrl = 'https://gergos-smart-home-server.herokuapp.com';
+
+const getDevices = async () => {
+  const response = await fetch(`${baseUrl}/devices`);
+  const devices = await response.json();
+
+  return {
+    devices
+  };
+}
 
 const Index = ({ devices }) => {
   const { params: { setTemp: initialDesiredTemp } } = devices.find(({ name }) => name === 'thermostat')
@@ -95,13 +104,6 @@ const Index = ({ devices }) => {
   )
 }
 
-Index.getInitialProps = async function() {
-  const response = await fetch(`${baseUrl}/devices`);
-  const devices = await response.json();
-
-  return {
-    devices
-  };
-};
+Index.getInitialProps = getDevices;
 
 export default Index;
