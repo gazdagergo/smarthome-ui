@@ -2,6 +2,7 @@ import App, { Container } from "next/app";
 import Head from "next/head";
 import styled, { createGlobalStyle } from "styled-components";
 import { title } from "./_document";
+import cookie from 'js-cookie'
 
 // Any global CSS variables and selectors we want
 const GlobalStyle = createGlobalStyle`
@@ -38,6 +39,8 @@ export default class MyApp extends App {
 
   render() {
     const { Component, pageProps, router } = this.props;
+    const { query: { apikey } } = router;
+    cookie.set('apikey', apikey)
 
     return (
       <>

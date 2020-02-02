@@ -1,6 +1,8 @@
 import fetch from "isomorphic-unfetch";
 import { useState } from "react";
 import styled from 'styled-components';
+import cookie from 'js-cookie';
+
 
 const Dashboard = styled.div`
   display: flex;
@@ -50,7 +52,8 @@ const Row = styled.div`
   justify-content: center;
 `
 
-const baseUrl = 'https://gergos-smart-home-server.herokuapp.com';
+const apikey = cookie.get('apikey');
+const baseUrl = `https://gergos-smart-home-server.herokuapp.com`;
 
 const getDevices = async () => {
   const response = await fetch(`${baseUrl}/devices`);
@@ -62,14 +65,12 @@ const getDevices = async () => {
 }
 
 const getDeviceValue = (devices, deviceName, paramName) => {
-  console.log({devices})
   return (
   devices && devices.find && devices.find(({ name }) => name === deviceName)['params'][paramName]
 )
   }
 
 const Index = ({ devices: initialDevices }) => {
-
 
   const [devices, setDevices] = useState(initialDevices)
 
@@ -79,17 +80,24 @@ const Index = ({ devices: initialDevices }) => {
   }
 
   const handleTempChange = async diff => {
-    const newTemp = Math.round((desiredTemp + diff)* 10)/10;
-    await fetch(`${baseUrl}/devices`, {
+    const setTemp = getDeviceValue(devices, 'thermostat', 'setTemp');
+    const newTemp = Math.round((setTemp + diff)* 10)/10;
+    await fetch(`${baseUrl}/devices?name=thermostat`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'apikey': apikey
       },
       body: JSON.stringify({ "params": {
         setTemp: newTemp
       }})      
     })
-    setDesiredTemp(newTemp)
+    setDevices(devices.map(device => {
+      if (device.name === 'thermostat') {
+        return {...device, params: {...device.params, setTemp: newTemp }}
+      }
+      return device;
+    }))
   }
 
   return (
