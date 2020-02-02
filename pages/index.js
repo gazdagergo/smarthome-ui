@@ -61,13 +61,22 @@ const getDevices = async () => {
   };
 }
 
-const Index = ({ devices }) => {
-  const { params: { setTemp: initialDesiredTemp } } = devices.find(({ name }) => name === 'thermostat')
-  const { params: { temp: initialMeasuredTemp } } = devices.find(({ name }) => name === 'living-room-thermometer')
-  const { params: { relay } } = devices.find(({ name }) => name === 'boiler')
+const getDeviceValue = (devices, deviceName, paramName) => {
+  console.log({devices})
+  return (
+  devices && devices.find && devices.find(({ name }) => name === deviceName)['params'][paramName]
+)
+  }
 
-  const [desiredTemp, setDesiredTemp] = useState(initialDesiredTemp)
-  const [measuredTemp, setMeasuredTemp] = useState(initialMeasuredTemp)
+const Index = ({ devices: initialDevices }) => {
+
+
+  const [devices, setDevices] = useState(initialDevices)
+
+  const handleRefresh = async () => {
+    const { devices } = await getDevices()
+    setDevices(devices);
+  }
 
   const handleTempChange = async diff => {
     const newTemp = Math.round((desiredTemp + diff)* 10)/10;
@@ -86,20 +95,22 @@ const Index = ({ devices }) => {
   return (
     <Dashboard>
       <Label>room temp</Label>
-      <NumDisplay>{measuredTemp}</NumDisplay>
+      <NumDisplay>{getDeviceValue(devices, 'living-room-thermometer', 'temp')}</NumDisplay>
       <br />
       <br />
       <Label>set temp</Label>
       <Row>
         <Button onClick={() => handleTempChange(-0.1)}>-</Button>
-        <NumDisplay>{desiredTemp}</NumDisplay>
+        <NumDisplay>{getDeviceValue(devices, 'thermostat', 'setTemp')}</NumDisplay>
         <Button onClick={() => handleTempChange(+0.1)}>+</Button>
       </Row>
       <br />
       <br />
-      <Label>Boiler</Label>
+      <Label>boiler</Label>
+      <Lamp on={getDeviceValue(devices, 'boiler', 'relay')} />
       <br />
-      <Lamp on={relay} />
+      <br />
+      <Button onClick={handleRefresh}>↺</Button>
     </Dashboard>  
   )
 }
