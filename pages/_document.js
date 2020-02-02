@@ -1,10 +1,10 @@
 import Document, { Head, Main, NextScript } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 
-export const title = "Next.js PWA Boilerplate";
+export const title = "Smarthome Dashboard";
 const description =
-  "Next.js PWA Boilerplate starts your progressive web app off with a perfect Google Lighthouse score.";
-const url = `https://smarthome-ui.herokuapp.com/`;
+  "Dashboard for smarthome";
+const url = `https://smarthome-ui.now.sh/`;
 const thumbnail = `${url}/static/graphics/thumbnail.png`;
 
 export default class MyDocument extends Document {
