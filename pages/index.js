@@ -61,7 +61,7 @@ const Index = ({ devices }) => {
   const [measuredTemp, setMeasuredTemp] = useState(initialMeasuredTemp)
 
   const handleTempChange = async diff => {
-    const newTemp = desiredTemp + diff;
+    const newTemp = Math.round((desiredTemp + diff)* 10)/10;
     await fetch(`${baseUrl}/devices`, {
       method: 'PUT',
       headers: {
