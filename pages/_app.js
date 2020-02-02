@@ -11,7 +11,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background: var(--background--1);
+    background: black;
     font-family: 'PT Sans', sans-serif;
     margin: 0;
   }
@@ -20,7 +20,9 @@ const GlobalStyle = createGlobalStyle`
 const Main = styled.main`
   margin: 0 auto;
   max-width: var(--max-width);
-  padding: var(--padding);
+  /* padding: var(--padding); */
+  height: 100vh;
+  color: lightgray;
 `;
 
 export default class MyApp extends App {
