@@ -52,7 +52,6 @@ const Row = styled.div`
   justify-content: center;
 `
 
-const apikey = cookie.get('apikey');
 const baseUrl = `https://gergos-smart-home-server.herokuapp.com`;
 
 const getDevices = async () => {
@@ -70,9 +69,10 @@ const getDeviceValue = (devices, deviceName, paramName) => {
 )
   }
 
-const Index = ({ devices: initialDevices }) => {
-
+const Index = ({ devices: initialDevices, router }) => {
+  const apikey = cookie.get('apikey');
   const [devices, setDevices] = useState(initialDevices)
+  const [ak, setApiKey] = useState(null)
 
   const handleRefresh = async () => {
     const { devices } = await getDevices()
@@ -98,6 +98,20 @@ const Index = ({ devices: initialDevices }) => {
       }
       return device;
     }))
+  }
+
+  if (!apikey) {
+    return (
+      <Dashboard>
+        <Label>Add your api key</Label>
+        <input onChange={({ target: { value }}) => setApiKey(value)} />
+        <br />
+        <button onClick={() => {
+          cookie.set('apikey', ak);
+          router.push('/')
+        }}>OK</button>
+      </Dashboard>
+    )
   }
 
   return (

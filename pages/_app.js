@@ -36,11 +36,16 @@ export default class MyApp extends App {
 
     return { pageProps };
   }
+  
 
   render() {
     const { Component, pageProps, router } = this.props;
+
+    let storedapikey = cookie.get('apikey');
     const { query: { apikey } } = router;
-    cookie.set('apikey', apikey)
+    if (!storedapikey && apikey) {
+      cookie.set('apikey', apikey)
+    }
 
     return (
       <>
