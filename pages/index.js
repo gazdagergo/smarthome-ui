@@ -35,6 +35,8 @@ const Button = styled.button`
   border-radius: 50%;
   width: 30px;
   height: 30px;
+  max-width: 30px;
+  max-height: 30px;
   font-size: 24px;
   font-weight: bold;
   display: flex;
