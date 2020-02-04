@@ -29,12 +29,15 @@ const Main = styled.main`
 export default class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
+    try {
+      if (Component.getInitialProps) {
+        pageProps = await Component.getInitialProps(ctx);
+      }
 
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
+      return { pageProps };
+    } catch(error) {
+      console.log(error)
     }
-
-    return { pageProps };
   }
   
 

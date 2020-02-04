@@ -22,6 +22,14 @@ const NumDisplay = styled.span`
 `
 
 const Button = styled.button`
+  @keyframes spin { 100% { transform:rotate(-360deg) } }
+  @keyframes done {
+    0% { background: lightgreen }
+    80% { background: lightgreen }
+    100% { background: gray }
+  }
+
+
   background: gray;
   border: none;
   border-radius: 50%;
@@ -29,12 +37,19 @@ const Button = styled.button`
   height: 30px;
   font-size: 24px;
   font-weight: bold;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   line-height: 24px;
   margin: 0 10px;
   box-sizing: border-box;
+  &:active {
+    background: lightgray;
+  }
+  ${({ state }) => {
+    if (state === 'loading') return 'animation: spin 3s linear infinite;'
+    if (state === 'done') return 'animation: done 3s ease-out;'
+  }}
 `
 
 const Lamp = styled.div`
@@ -52,20 +67,35 @@ const Row = styled.div`
   justify-content: center;
 `
 
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 12px;
+  background: lightsalmon;
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: darkred;
+`
+
 const baseUrl = `https://gergos-smart-home-server.herokuapp.com`;
 
 const getDevices = async () => {
-  const response = await fetch(`${baseUrl}/devices`);
-  const devices = await response.json();
-
-  return {
-    devices
-  };
+  try {
+    const response = await fetch(`${baseUrl}/devices`);
+    const devices = await response.json();
+    return {
+      devices
+    };
+  } catch(error){
+    return { devices: null }
+  }
 }
 
 const getDeviceValue = (devices, deviceName, paramName) => {
   return (
-  devices && devices.find && devices.find(({ name }) => name === deviceName)['params'][paramName]
+  devices && 
+  devices.find && 
+  devices.find(({ name }) => name === deviceName) &&
+  devices.find(({ name }) => name === deviceName)['params'][paramName]
 )
   }
 
@@ -73,10 +103,19 @@ const Index = ({ devices: initialDevices, router }) => {
   const apikey = cookie.get('apikey');
   const [devices, setDevices] = useState(initialDevices)
   const [ak, setApiKey] = useState(null)
+  const [loadingState, setLoadingState] = useState(null)
+  const [error, setError] = useState(null)
 
   const handleRefresh = async () => {
+    setLoadingState('loading')
     const { devices } = await getDevices()
-    setDevices(devices);
+    if (!devices){
+      setError('Error while refresh data')
+      setLoadingState(null)
+    } else {
+      setDevices(devices);
+      setLoadingState('done')
+    }
   }
 
   const handleTempChange = async diff => {
@@ -116,6 +155,7 @@ const Index = ({ devices: initialDevices, router }) => {
 
   return (
     <Dashboard>
+      {error && <ErrorBox>{error}</ErrorBox>}
       <Label>room temp</Label>
       <NumDisplay>{getDeviceValue(devices, 'living-room-thermometer', 'temp')}</NumDisplay>
       <br />
@@ -132,7 +172,9 @@ const Index = ({ devices: initialDevices, router }) => {
       <Lamp on={getDeviceValue(devices, 'boiler', 'relay')} />
       <br />
       <br />
-      <Button onClick={handleRefresh}>↺</Button>
+      <Button state={loadingState} onClick={handleRefresh}>
+        <span>↺</span>
+      </Button>
     </Dashboard>  
   )
 }
