@@ -29,7 +29,7 @@ const Button = styled.button`
     100% { background: gray }
   }
 
-
+  padding: 0px;
   background: gray;
   border: none;
   border-radius: 50%;
