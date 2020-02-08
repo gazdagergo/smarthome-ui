@@ -148,7 +148,7 @@ const Index = ({ devices: initialDevices, router }) => {
         <input onChange={({ target: { value }}) => setApiKey(value)} />
         <br />
         <button onClick={() => {
-          cookie.set('apikey', ak);
+          cookie.set('apikey', ak, { expires: 90 });
           router.push('/')
         }}>OK</button>
       </Dashboard>

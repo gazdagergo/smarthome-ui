@@ -47,7 +47,7 @@ export default class MyApp extends App {
     let storedapikey = cookie.get('apikey');
     const { query: { apikey } } = router;
     if (!storedapikey && apikey) {
-      cookie.set('apikey', apikey)
+      cookie.set('apikey', apikey, { expires: 90 })
     }
 
     return (
