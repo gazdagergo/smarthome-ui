@@ -174,9 +174,11 @@ const Index = ({ devices: initialDevices, router }) => {
       <Lamp on={getDeviceValue(devices, 'boiler', 'relay')} />
       <br />
       <br />
-      <Button state={loadingState} onClick={handleRefresh}>
-        <span>↺</span>
-      </Button>
+      <Row>
+        <Button state={loadingState} onClick={handleRefresh}>
+          <span>↺</span>
+        </Button>
+      </Row>
     </Dashboard>  
   )
 }
