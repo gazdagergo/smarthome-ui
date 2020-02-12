@@ -2,7 +2,7 @@ import fetch from "isomorphic-unfetch";
 import { useState } from "react";
 import styled from 'styled-components';
 import cookie from 'js-cookie';
-
+import Time from './Time';
 
 const Dashboard = styled.div`
   display: flex;
@@ -160,6 +160,7 @@ const Index = ({ devices: initialDevices, router }) => {
       {error && <ErrorBox>{error}</ErrorBox>}
       <Label>room temp</Label>
       <NumDisplay>{getDeviceValue(devices, 'living-room-thermometer', 'temp')}</NumDisplay>
+      <Time utc={getDeviceValue(devices, 'living-room-thermometer', 'updatedAt')} />
       <br />
       <br />
       <Label>set temp</Label>
