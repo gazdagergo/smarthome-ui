@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const TimeWrap = styled.div``
 
 export default ({ utc }) => (
-	<TimeWrap>
-		{moment(utc).fromNow()}
-	</TimeWrap>
+  <TimeWrap>
+    {moment(utc).fromNow()}
+  </TimeWrap>
 )
