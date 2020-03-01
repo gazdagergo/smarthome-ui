@@ -1,6 +1,6 @@
 export const reduceDevicesState = data => (
-  data.reduce(( acc, {name, params}) => (
-    { ...acc, [name]: params }
+  data.reduce(( acc, {name, params, updatedAt}) => (
+    { ...acc, [name]: { ...params, updatedAt } }
   ), {})
 )
 
